@@ -30,6 +30,10 @@
 // Input: "1\n2,3"
 // Output: 6
 
+// Test Case 8:
+// Input: "//;\n1;2"
+// Output: 6
+
 function add(dataString) {
   if (!!dataString) {
     // This block will be executed if dataString is not empty
@@ -57,13 +61,19 @@ function add(dataString) {
 
 function sanitizeString(data) {
   let finalStringOfNumbers = [];
+  let localData = data;
+  const delimiter = handleFindDelimiter(data);
 
-  const stringArrayWithoutWhiteSpaces = data.split(",").reduce((arr, str) => {
-    if (!!str) {
-      arr.push(handleRemoveWhiteSpaces(str));
-    }
-    return arr;
-  }, []);
+  localData = handleRemoveDelimiter(localData);
+
+  const stringArrayWithoutWhiteSpaces = localData
+    .split(delimiter)
+    .reduce((arr, str) => {
+      if (!!str) {
+        arr.push(handleRemoveWhiteSpaces(str));
+      }
+      return arr;
+    }, []);
 
   stringArrayWithoutWhiteSpaces.map((withoutSpaceStr) => {
     if (withoutSpaceStr.includes("\n")) {
@@ -82,4 +92,18 @@ function handleRemoveWhiteSpaces(dataStr) {
   return dataStr.split(" ").join("");
 }
 
-console.log(add("\n2,103"));
+function handleFindDelimiter(dataStr) {
+  let customDelimiter = "";
+
+  if (dataStr.includes("//")) {
+    customDelimiter = dataStr.split("\n")[0].split("//").join("").trim();
+  }
+
+  return !!customDelimiter ? customDelimiter : ",";
+}
+
+function handleRemoveDelimiter(dataStr) {
+  return dataStr.split("//").join("").trim();
+}
+
+console.log(add("//;\n1;2"));
