@@ -34,6 +34,10 @@
 // Input: "//;\n1;2"
 // Output: 6
 
+// Test Case 9:
+// Input: "3,-10,5,-8,5"
+// Output: Negatives not allowed: -10, -8
+
 function add(dataString) {
   if (!!dataString) {
     // This block will be executed if dataString is not empty
@@ -43,7 +47,10 @@ function add(dataString) {
     // 1. Sanitize the string of unnecessary white spaces
     const cleanedStringArray = sanitizeString(dataString);
 
-    // 2. Perform the addition
+    // 2. Check if string contains negative numbers
+    handleCheckIfStringContainsNegativeNumber(cleanedStringArray);
+
+    // 3. Perform the addition
 
     if (cleanedStringArray.length === 1) {
       return parseInt(cleanedStringArray[0]);
@@ -64,7 +71,7 @@ function sanitizeString(data) {
   let localData = data;
   const delimiter = handleFindDelimiter(data);
 
-  localData = handleRemoveDelimiter(localData);
+  localData = handleRemoveDelimiterStart(localData);
 
   const stringArrayWithoutWhiteSpaces = localData
     .split(delimiter)
@@ -102,8 +109,16 @@ function handleFindDelimiter(dataStr) {
   return !!customDelimiter ? customDelimiter : ",";
 }
 
-function handleRemoveDelimiter(dataStr) {
+function handleRemoveDelimiterStart(dataStr) {
   return dataStr.split("//").join("").trim();
 }
 
-console.log(add("//;\n1;2"));
+function handleCheckIfStringContainsNegativeNumber(numbersArr) {
+  const negativeNumbers = numbersArr.filter((num) => num < 0);
+
+  if (negativeNumbers.length > 0) {
+    throw new Error(`Negatives not allowed: ${negativeNumbers.join(", ")}`);
+  }
+}
+
+console.log(add("3,2,8,10"));
