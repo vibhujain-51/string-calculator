@@ -65,13 +65,13 @@ function sanitizeString(data) {
     return arr;
   }, []);
 
-  stringArrayWithoutWhiteSpaces.map((withoutSpaceString) => {
-    if (withoutSpaceString.includes("\n")) {
-      withoutSpaceString.split("\n").map((item) => {
-        finalStringOfNumbers.push(handleRemoveWhiteSpaces(item));
+  stringArrayWithoutWhiteSpaces.map((withoutSpaceStr) => {
+    if (withoutSpaceStr.includes("\n")) {
+      withoutSpaceStr.split("\n").forEach((item) => {
+        if (!!item) finalStringOfNumbers.push(handleRemoveWhiteSpaces(item));
       });
     } else {
-      finalStringOfNumbers.push(withoutSpaceString);
+      finalStringOfNumbers.push(withoutSpaceStr);
     }
   });
 
@@ -82,4 +82,4 @@ function handleRemoveWhiteSpaces(dataStr) {
   return dataStr.split(" ").join("");
 }
 
-console.log(add("1\n2,103"));
+console.log(add("\n2,103"));
