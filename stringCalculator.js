@@ -26,6 +26,10 @@
 // Input: "100 , 5, 4, 7, 2, 6, 9   "
 // Output: 34
 
+// Test Case 8:
+// Input: "1\n2,3"
+// Output: 6
+
 function add(dataString) {
   if (!!dataString) {
     // This block will be executed if dataString is not empty
@@ -52,13 +56,30 @@ function add(dataString) {
 }
 
 function sanitizeString(data) {
-  const cleanedString = data.split(",").map((str) => {
+  let finalStringOfNumbers = [];
+
+  const stringArrayWithoutWhiteSpaces = data.split(",").reduce((arr, str) => {
     if (!!str) {
-      return str.split(" ").join("").trim();
+      arr.push(handleRemoveWhiteSpaces(str));
+    }
+    return arr;
+  }, []);
+
+  stringArrayWithoutWhiteSpaces.map((withoutSpaceString) => {
+    if (withoutSpaceString.includes("\n")) {
+      withoutSpaceString.split("\n").map((item) => {
+        finalStringOfNumbers.push(handleRemoveWhiteSpaces(item));
+      });
+    } else {
+      finalStringOfNumbers.push(withoutSpaceString);
     }
   });
 
-  return cleanedString;
+  return finalStringOfNumbers;
 }
 
-console.log(add("100 , 5, 4, 7, 2, 6, 9   "));
+function handleRemoveWhiteSpaces(dataStr) {
+  return dataStr.split(" ").join("");
+}
+
+console.log(add("1\n2,103"));
